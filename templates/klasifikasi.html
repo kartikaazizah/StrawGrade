@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Klasifikasi — StrawGrade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">🍓</span>
+        <span class="logo-text">StrawGrade</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}" class="nav-link">Home</a></li>
+        <li><a href="{{ url_for('klasifikasi') }}" class="nav-link active">Klasifikasi</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-title">Klasifikasi Mutu Stroberi</h1>
+      <p class="page-sub">Upload foto buah stroberi dari <strong>4 sisi</strong> (depan, kanan, kiri, belakang) agar sistem dapat menilai kualitas buah secara menyeluruh dan akurat.</p>
+    </div>
+  </div>
+
+  <!-- ===== STATE 1: UPLOAD SECTION ===== -->
+  <section id="uploadSection" class="section upload-section">
+    <div class="container">
+
+      <!-- Panduan Foto -->
+      <div class="guide-header">
+        <div class="section-label">Panduan Pengambilan Foto</div>
+        <h2 class="section-title-sm">Foto dari 4 Sisi untuk Hasil Akurat</h2>
+        <p class="guide-intro">
+          Sistem ini menilai kualitas stroberi dari empat sudut pandang (depan, kanan, kiri, belakang)
+          untuk mendeteksi cacat yang mungkin tersembunyi di satu sisi saja.
+          Grade akhir ditentukan dari sisi dengan kualitas terendah (<em>worst-case grading</em>).
+        </p>
+      </div>
+
+      <div class="guide-grid">
+        <!-- BENAR -->
+        <div class="guide-card guide-good">
+          <div class="guide-card-header">
+            <span class="guide-badge good">✓ Cara Foto yang Benar</span>
+          </div>
+          <div class="guide-photos">
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder good-placeholder">
+                <img src="{{ url_for('static', filename='contoh-benar-1.jpg') }}"
+                      alt="Contoh Benar 1"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">📷</span>
+                <div class="ph-label">Contoh Benar 1</div>
+                <div class="ph-desc">Background putih, cahaya merata</div>
+              </div>
+            </div>
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder good-placeholder">
+                <img src="{{ url_for('static', filename='contoh-benar-2.jpg') }}"
+                      alt="Contoh Benar 2"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">📷</span>
+                <div class="ph-label">Contoh Benar 2</div>
+                <div class="ph-desc">Buah terlihat penuh & jelas</div>
+              </div>
+            </div>
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder good-placeholder">
+                <img src="{{ url_for('static', filename='contoh-benar-3.jpg') }}"
+                      alt="Contoh Benar 3"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">📷</span>
+                <div class="ph-label">Contoh Benar 3</div>
+                <div class="ph-desc">Fokus tajam, tidak blur</div>
+              </div>
+            </div>
+          </div>
+          <ul class="guide-tips good-tips">
+            <li>✅ Gunakan <strong>latar belakang putih polos</strong> (kertas/kain putih)</li>
+            <li>✅ Pastikan <strong>pencahayaan merata</strong> — hindari bayangan di buah</li>
+            <li>✅ Foto buah dari <strong>jarak 15–20 cm</strong>, buah terlihat penuh</li>
+            <li>✅ Pastikan gambar <strong>fokus dan tidak blur</strong></li>
+            <li>✅ Upload <strong>4 sisi berbeda</strong> dari buah yang sama untuk hasil terpercaya</li>
+          </ul>
+        </div>
+
+        <!-- SALAH -->
+        <div class="guide-card guide-bad">
+          <div class="guide-card-header">
+            <span class="guide-badge bad">✗ Cara Foto yang Salah</span>
+          </div>
+          <div class="guide-photos">
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder bad-placeholder">
+                <img src="{{ url_for('static', filename='contoh-Salah-1.jpg') }}"
+                      alt="Contoh Salah 1"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">🚫</span>
+                <div class="ph-label">Contoh Salah 1</div>
+                <div class="ph-desc">Background tidak polos/ramai</div>
+              </div>
+            </div>
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder bad-placeholder">
+                <img src="{{ url_for('static', filename='contoh-Salah-2.jpg') }}"
+                      alt="Contoh Salah 2"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">🚫</span>
+                <div class="ph-label">Contoh Salah 2</div>
+                <div class="ph-desc">Pencahayaan kurang</div>
+              </div>
+            </div>
+            <div class="guide-photo-slot">
+              <div class="photo-placeholder bad-placeholder">
+                <img src="{{ url_for('static', filename='contoh-Salah-3.jpg') }}"
+                      alt="Contoh Salah 3"
+                      style="width:100%;height:100%;object-fit:cover;border-radius:8px;"
+                      onerror="this.style.display='none';this.parentElement.querySelector('.ph-icon').style.display='block'">
+                <span class="ph-icon" style="display:none;font-size:1.5rem;">🚫</span>
+                <div class="ph-label">Contoh Salah 3</div>
+                <div class="ph-desc">Foto blur/tidak fokus</div>
+              </div>
+            </div>
+          </div>
+          <ul class="guide-tips bad-tips">
+            <li>❌ <strong>Background ramai</strong> (meja kayu, karpet, tanah)</li>
+            <li>❌ <strong>Pencahayaan buruk</strong> — terlalu gelap atau backlight</li>
+            <li>❌ <strong>Foto blur</strong> karena tangan bergerak</li>
+            <li>❌ Buah <strong>tertutup sebagian</strong> oleh tangan atau benda lain</li>
+            <li>❌ <strong>4 foto dari sisi yang sama</strong> — harus dari sudut berbeda</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== AREA UPLOAD 4 SISI ===== -->
+      <div class="upload-area-wrapper">
+        <div class="section-label" style="text-align:center;">Upload Foto 4 Sisi</div>
+        <h2 class="section-title-sm" style="text-align:center;">Upload Foto Stroberi dari 4 Sisi</h2>
+        <p class="upload-4-intro">
+          Semua slot harus terisi sebelum tombol Klasifikasi aktif.
+          Pastikan ke-4 foto berasal dari <strong>buah yang sama</strong>.
+        </p>
+
+        <!-- Grid 4 slot upload -->
+        <div class="upload-grid-4">
+
+          <!-- SLOT DEPAN -->
+          <div class="slot-wrapper" id="slot-sisi_depan">
+            <div class="slot-label">
+              <span class="slot-icon">⬆️</span> Sisi Depan
+              <span class="slot-required">*</span>
+            </div>
+            <div class="slot-box" id="box-sisi_depan"
+                 onclick="triggerInput('sisi_depan')"
+                 ondragover="onDragOver(event,'sisi_depan')"
+                 ondragleave="onDragLeave(event,'sisi_depan')"
+                 ondrop="onDrop(event,'sisi_depan')">
+              <input type="file" id="input-sisi_depan" accept=".jpg,.jpeg,.png"
+                     class="file-input-hidden"
+                     onchange="handleSlot('sisi_depan', this.files[0])">
+              <div class="slot-empty" id="empty-sisi_depan">
+                <div class="slot-empty-icon">📁</div>
+                <div class="slot-empty-text">Klik atau seret foto</div>
+                <div class="slot-empty-sub">JPG / PNG · maks 10 MB</div>
+              </div>
+              <div class="slot-preview" id="preview-sisi_depan" style="display:none;">
+                <img id="img-sisi_depan" src="" alt="Preview Depan" class="slot-img">
+                <button class="slot-remove" onclick="removeSlot(event,'sisi_depan')" title="Hapus foto">✕</button>
+                <div class="slot-filename" id="name-sisi_depan"></div>
+              </div>
+            </div>
+            <div class="slot-error" id="err-sisi_depan" style="display:none;"></div>
+          </div>
+
+          <!-- SLOT KANAN -->
+          <div class="slot-wrapper" id="slot-sisi_kanan">
+            <div class="slot-label">
+              <span class="slot-icon">➡️</span> Sisi Kanan
+              <span class="slot-required">*</span>
+            </div>
+            <div class="slot-box" id="box-sisi_kanan"
+                 onclick="triggerInput('sisi_kanan')"
+                 ondragover="onDragOver(event,'sisi_kanan')"
+                 ondragleave="onDragLeave(event,'sisi_kanan')"
+                 ondrop="onDrop(event,'sisi_kanan')">
+              <input type="file" id="input-sisi_kanan" accept=".jpg,.jpeg,.png"
+                     class="file-input-hidden"
+                     onchange="handleSlot('sisi_kanan', this.files[0])">
+              <div class="slot-empty" id="empty-sisi_kanan">
+                <div class="slot-empty-icon">📁</div>
+                <div class="slot-empty-text">Klik atau seret foto</div>
+                <div class="slot-empty-sub">JPG / PNG · maks 10 MB</div>
+              </div>
+              <div class="slot-preview" id="preview-sisi_kanan" style="display:none;">
+                <img id="img-sisi_kanan" src="" alt="Preview Kanan" class="slot-img">
+                <button class="slot-remove" onclick="removeSlot(event,'sisi_kanan')" title="Hapus foto">✕</button>
+                <div class="slot-filename" id="name-sisi_kanan"></div>
+              </div>
+            </div>
+            <div class="slot-error" id="err-sisi_kanan" style="display:none;"></div>
+          </div>
+
+          <!-- SLOT KIRI -->
+          <div class="slot-wrapper" id="slot-sisi_kiri">
+            <div class="slot-label">
+              <span class="slot-icon">⬅️</span> Sisi Kiri
+              <span class="slot-required">*</span>
+            </div>
+            <div class="slot-box" id="box-sisi_kiri"
+                 onclick="triggerInput('sisi_kiri')"
+                 ondragover="onDragOver(event,'sisi_kiri')"
+                 ondragleave="onDragLeave(event,'sisi_kiri')"
+                 ondrop="onDrop(event,'sisi_kiri')">
+              <input type="file" id="input-sisi_kiri" accept=".jpg,.jpeg,.png"
+                     class="file-input-hidden"
+                     onchange="handleSlot('sisi_kiri', this.files[0])">
+              <div class="slot-empty" id="empty-sisi_kiri">
+                <div class="slot-empty-icon">📁</div>
+                <div class="slot-empty-text">Klik atau seret foto</div>
+                <div class="slot-empty-sub">JPG / PNG · maks 10 MB</div>
+              </div>
+              <div class="slot-preview" id="preview-sisi_kiri" style="display:none;">
+                <img id="img-sisi_kiri" src="" alt="Preview Kiri" class="slot-img">
+                <button class="slot-remove" onclick="removeSlot(event,'sisi_kiri')" title="Hapus foto">✕</button>
+                <div class="slot-filename" id="name-sisi_kiri"></div>
+              </div>
+            </div>
+            <div class="slot-error" id="err-sisi_kiri" style="display:none;"></div>
+          </div>
+
+          <!-- SLOT BELAKANG -->
+          <div class="slot-wrapper" id="slot-sisi_belakang">
+            <div class="slot-label">
+              <span class="slot-icon">⬇️</span> Sisi Belakang
+              <span class="slot-required">*</span>
+            </div>
+            <div class="slot-box" id="box-sisi_belakang"
+                 onclick="triggerInput('sisi_belakang')"
+                 ondragover="onDragOver(event,'sisi_belakang')"
+                 ondragleave="onDragLeave(event,'sisi_belakang')"
+                 ondrop="onDrop(event,'sisi_belakang')">
+              <input type="file" id="input-sisi_belakang" accept=".jpg,.jpeg,.png"
+                     class="file-input-hidden"
+                     onchange="handleSlot('sisi_belakang', this.files[0])">
+              <div class="slot-empty" id="empty-sisi_belakang">
+                <div class="slot-empty-icon">📁</div>
+                <div class="slot-empty-text">Klik atau seret foto</div>
+                <div class="slot-empty-sub">JPG / PNG · maks 10 MB</div>
+              </div>
+              <div class="slot-preview" id="preview-sisi_belakang" style="display:none;">
+                <img id="img-sisi_belakang" src="" alt="Preview Belakang" class="slot-img">
+                <button class="slot-remove" onclick="removeSlot(event,'sisi_belakang')" title="Hapus foto">✕</button>
+                <div class="slot-filename" id="name-sisi_belakang"></div>
+              </div>
+            </div>
+            <div class="slot-error" id="err-sisi_belakang" style="display:none;"></div>
+          </div>
+
+        </div><!-- /upload-grid-4 -->
+
+        <!-- Progress counter -->
+        <div class="upload-progress-bar">
+          <div class="upload-progress-text">
+            <span id="slotCount">0</span> dari 4 foto sudah dipilih
+          </div>
+          <div class="upload-progress-track">
+            <div class="upload-progress-fill" id="progressFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Error global -->
+        <div class="error-box" id="errorBox" style="display:none;">
+          <span class="error-icon">⚠️</span>
+          <span id="errorMsg"></span>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-box" id="loadingBox" style="display:none;">
+          <div class="spinner"></div>
+          <div class="loading-text">Menganalisis 4 sisi stroberi...</div>
+          <div class="loading-sub">Model sedang memproses karakteristik visual dari setiap sudut</div>
+        </div>
+
+        <!-- Tombol Klasifikasi — disabled sampai 4 slot terisi -->
+        <button class="btn-classify-main" id="btnClassify" disabled onclick="doClassify()">
+          Klasifikasi Sekarang →
+        </button>
+        <p class="btn-classify-hint" id="btnHint">Lengkapi ke-4 foto terlebih dahulu</p>
+
+      </div><!-- /upload-area-wrapper -->
+    </div>
+  </section>
+
+  <!-- ===== STATE 2: HASIL KLASIFIKASI ===== -->
+  <section id="hasilSection" class="section hasil-section" style="display:none;">
+    <div class="container">
+
+      <div class="hasil-header">
+        <div class="section-label">Hasil Analisis Multi-View</div>
+        <h2 class="section-title-sm">Hasil Klasifikasi Stroberi</h2>
+      </div>
+
+      <!-- Grade akhir (worst-case) — ditampilkan paling atas & besar -->
+      <div class="final-grade-banner" id="finalGradeBanner">
+        <div class="final-grade-left">
+          <div class="final-grade-eyebrow">Grade Akhir (Worst-Case Grading)</div>
+          <div class="final-grade-value" id="finalGradeValue">—</div>
+          <div class="final-grade-name" id="finalGradeName">—</div>
+        </div>
+        <div class="final-grade-right">
+          <div class="final-grade-note" id="finalGradeNote">—</div>
+        </div>
+      </div>
+
+      <!-- Tabel hasil per sisi -->
+      <div class="sisi-result-section">
+        <h3 class="sisi-result-title">Detail Hasil per Sisi</h3>
+        <p class="sisi-result-intro">
+          Sistem melakukan prediksi pada ke-4 sisi secara independen.
+          Grade akhir menggunakan strategi <em>worst-case grading</em> —
+          grade terendah dari semua sisi yang menentukan hasil akhir.
+        </p>
+
+        <div class="sisi-table-wrapper">
+          <table class="sisi-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Sisi</th>
+                <th>Grade</th>
+                <th>Confidence</th>
+                <th>Distribusi Probabilitas</th>
+              </tr>
+            </thead>
+            <tbody id="sisiTableBody">
+              <!-- diisi JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Peringatan kalau ada sisi confidence rendah -->
+        <div class="conf-warning" id="confWarning" style="display:none;">
+          <span>⚠️</span>
+          <span id="confWarningMsg"></span>
+        </div>
+      </div>
+
+      <!-- Deskripsi grade akhir -->
+      <div class="hasil-desc-box" id="hasilDesc"></div>
+
+      <!-- Kriteria per Grade -->
+      <div class="kriteria-section">
+        <h3 class="kriteria-title">Kriteria Penentu per Grade</h3>
+        <p class="kriteria-intro">
+          Berikut adalah kriteria visual yang digunakan sistem untuk menentukan grade buah stroberi,
+          berdasarkan standar SNI 8026:2014 dan USDA AMS 2016.
+        </p>
+        <div class="kriteria-grid">
+          <div class="kriteria-card" id="kriteriaA">
+            <div class="kriteria-grade-badge grade-a-badge">Grade A</div>
+            <div class="kriteria-grade-sub">Premium</div>
+            <ul class="kriteria-list">
+              <li><strong>Warna:</strong> ≥75% permukaan merah/pink merata</li>
+              <li><strong>Kematangan:</strong> Matang optimal, kulit mengkilap &amp; padat</li>
+              <li><strong>Bentuk:</strong> Kerucut/oval sempurna di semua 4 sisi</li>
+              <li><strong>Ukuran:</strong> Bobot &gt;20 gram</li>
+              <li><strong>Cacat:</strong> ≤10% permukaan</li>
+            </ul>
+            <div class="kriteria-rule">Semua 5 karakteristik harus memenuhi level A</div>
+          </div>
+          <div class="kriteria-card" id="kriteriaB">
+            <div class="kriteria-grade-badge grade-b-badge">Grade B</div>
+            <div class="kriteria-grade-sub">Standar</div>
+            <ul class="kriteria-list">
+              <li><strong>Warna:</strong> 50–74% permukaan merah/pink</li>
+              <li><strong>Kematangan:</strong> Matang sebagian, tidak ada tanda busuk</li>
+              <li><strong>Bentuk:</strong> Maks 1 sisi deformasi ringan</li>
+              <li><strong>Ukuran:</strong> Bobot 15–20 gram</li>
+              <li><strong>Cacat:</strong> 10–25% permukaan</li>
+            </ul>
+            <div class="kriteria-rule">1–2 karakteristik boleh di level B; tidak ada yang di level C</div>
+          </div>
+          <div class="kriteria-card" id="kriteriaC">
+            <div class="kriteria-grade-badge grade-c-badge">Grade C</div>
+            <div class="kriteria-grade-sub">Rendah</div>
+            <ul class="kriteria-list">
+              <li><strong>Warna:</strong> &lt;50% permukaan merah/pink</li>
+              <li><strong>Kematangan:</strong> Mentah atau terlalu matang/busuk</li>
+              <li><strong>Bentuk:</strong> ≥2 sisi deformasi</li>
+              <li><strong>Ukuran:</strong> Bobot &lt;15 gram</li>
+              <li><strong>Cacat:</strong> &gt;25% permukaan atau ada jamur Botrytis</li>
+            </ul>
+            <div class="kriteria-rule">Cukup salah satu kondisi di atas untuk masuk Grade C</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-ulang" id="btnUlang" onclick="resetAll()">🔄 Klasifikasi Ulang</button>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🍓</span>
+        <span class="logo-text">StrawGrade</span>
+      </div>
+      <div class="footer-info">
+        Sistem Klasifikasi Mutu Stroberi berbasis Transfer Learning EfficientNet-B0<br/>
+        Tugas Akhir D-IV Teknik Informatika · Universitas Airlangga<br/>
+        Acuan: SNI 8026:2014 &amp; USDA AMS 2016
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // ---- Nav toggle (mobile) ----
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+      navToggle.classList.toggle('active');
+    });
+
+    // ============================================
+    // STATE: track file yang sudah dipilih per sisi
+    // ============================================
+    const SISI_FIELDS = ['sisi_depan', 'sisi_kanan', 'sisi_kiri', 'sisi_belakang'];
+    const selectedFiles = {
+      sisi_depan: null,
+      sisi_kanan: null,
+      sisi_kiri:  null,
+      sisi_belakang: null
+    };
+    // Simpan data URL preview untuk ditampilkan di hasil
+    const previewDataURLs = {
+      sisi_depan: null,
+      sisi_kanan: null,
+      sisi_kiri:  null,
+      sisi_belakang: null
+    };
+
+    // ============================================
+    // UTILITAS
+    // ============================================
+    function validateFile(file) {
+      const allowed = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowed.includes(file.type)) {
+        return 'Format tidak didukung. Gunakan JPG atau PNG.';
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        return 'Ukuran melebihi 10 MB. Kompres foto terlebih dahulu.';
+      }
+      return null;
+    }
+
+    function getSlotLabel(field) {
+      return { sisi_depan:'Depan', sisi_kanan:'Kanan',
+               sisi_kiri:'Kiri',  sisi_belakang:'Belakang' }[field] || field;
+    }
+
+    function countFilled() {
+      return SISI_FIELDS.filter(f => selectedFiles[f] !== null).length;
+    }
+
+    function updateProgress() {
+      const n = countFilled();
+      document.getElementById('slotCount').textContent = n;
+      document.getElementById('progressFill').style.width = (n / 4 * 100) + '%';
+
+      const btn  = document.getElementById('btnClassify');
+      const hint = document.getElementById('btnHint');
+      if (n === 4) {
+        btn.disabled = false;
+        btn.classList.add('ready');
+        hint.style.display = 'none';
+      } else {
+        btn.disabled = true;
+        btn.classList.remove('ready');
+        hint.style.display = 'block';
+        hint.textContent = `Lengkapi ${4 - n} foto lagi`;
+      }
+    }
+
+    // ============================================
+    // SLOT: handle file dipilih
+    // ============================================
+    function triggerInput(field) {
+      document.getElementById('input-' + field).click();
+    }
+
+    function handleSlot(field, file) {
+      if (!file) return;
+
+      // Reset error dulu
+      const errEl = document.getElementById('err-' + field);
+      errEl.style.display = 'none';
+
+      // Validasi
+      const err = validateFile(file);
+      if (err) {
+        errEl.textContent = err;
+        errEl.style.display = 'block';
+        // Reset input supaya bisa pilih lagi
+        document.getElementById('input-' + field).value = '';
+        return;
+      }
+
+      // Simpan file
+      selectedFiles[field] = file;
+
+      // Baca data URL untuk preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewDataURLs[field] = e.target.result;
+
+        // Tampilkan preview di slot
+        document.getElementById('img-' + field).src = e.target.result;
+        document.getElementById('name-' + field).textContent =
+          file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+        document.getElementById('empty-' + field).style.display  = 'none';
+        document.getElementById('preview-' + field).style.display = 'flex';
+
+        // Ubah border slot jadi hijau (filled)
+        document.getElementById('box-' + field).classList.add('slot-filled');
+
+        updateProgress();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeSlot(event, field) {
+      event.stopPropagation(); // jangan trigger click pada slot-box
+      selectedFiles[field]     = null;
+      previewDataURLs[field]   = null;
+
+      document.getElementById('input-' + field).value    = '';
+      document.getElementById('img-' + field).src         = '';
+      document.getElementById('name-' + field).textContent = '';
+      document.getElementById('empty-' + field).style.display   = 'block';
+      document.getElementById('preview-' + field).style.display = 'none';
+      document.getElementById('box-' + field).classList.remove('slot-filled');
+
+      updateProgress();
+    }
+
+    // ============================================
+    // DRAG & DROP per slot
+    // ============================================
+    function onDragOver(event, field) {
+      event.preventDefault();
+      document.getElementById('box-' + field).classList.add('drag-over');
+    }
+    function onDragLeave(event, field) {
+      document.getElementById('box-' + field).classList.remove('drag-over');
+    }
+    function onDrop(event, field) {
+      event.preventDefault();
+      document.getElementById('box-' + field).classList.remove('drag-over');
+      const file = event.dataTransfer.files[0];
+      if (file) handleSlot(field, file);
+    }
+
+    // ============================================
+    // KIRIM KE FLASK
+    // ============================================
+    function doClassify() {
+      if (countFilled() < 4) return;
+
+      // Sembunyikan error global
+      const errorBox = document.getElementById('errorBox');
+      errorBox.style.display = 'none';
+
+      // Tampilkan loading
+      document.getElementById('loadingBox').style.display = 'flex';
+      document.getElementById('btnClassify').disabled = true;
+
+      // Buat FormData dengan 4 file
+      const formData = new FormData();
+      SISI_FIELDS.forEach(field => {
+        formData.append(field, selectedFiles[field]);
+      });
+
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('loadingBox').style.display = 'none';
+
+        if (!data.success) {
+          showError(data.error || 'Terjadi kesalahan pada server.');
+          document.getElementById('btnClassify').disabled = false;
+          return;
+        }
+
+        if (!data.is_strawberry) {
+          showError(data.message || 'Tidak terdeteksi sebagai stroberi.');
+          document.getElementById('btnClassify').disabled = false;
+          return;
+        }
+
+        // Tampilkan hasil
+        showHasil(data);
+      })
+      .catch(err => {
+        document.getElementById('loadingBox').style.display = 'none';
+        showError('Gagal terhubung ke server. Pastikan server Flask sedang berjalan.');
+        document.getElementById('btnClassify').disabled = false;
+      });
+    }
+
+    function showError(msg) {
+      const box = document.getElementById('errorBox');
+      document.getElementById('errorMsg').textContent = msg;
+      box.style.display = 'flex';
+    }
+
+    // ============================================
+    // TAMPILKAN HASIL
+    // ============================================
+    function showHasil(data) {
+      document.getElementById('uploadSection').style.display = 'none';
+      document.getElementById('hasilSection').style.display  = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const gradeKey = data.final_grade; // 'Grade_A', 'Grade_B', 'Grade_C'
+      const gradeLetter = gradeKey.replace('Grade_', ''); // 'A', 'B', 'C'
+      const gradeNames  = { A: 'Premium', B: 'Standar', C: 'Rendah' };
+      const gradeColors = { A: 'green',   B: 'amber',   C: 'red'    };
+
+      // --- Banner grade akhir ---
+      const banner = document.getElementById('finalGradeBanner');
+      banner.className = 'final-grade-banner final-grade-' + gradeLetter.toLowerCase();
+      document.getElementById('finalGradeValue').textContent = 'Grade ' + gradeLetter;
+      document.getElementById('finalGradeName').textContent  = gradeNames[gradeLetter] || '';
+      document.getElementById('finalGradeNote').innerHTML =
+        `Grade akhir ditentukan dari sisi <strong>${data.worst_sisi}</strong> yang memiliki kualitas terendah.<br>
+         Pendekatan <em>worst-case grading</em> digunakan agar penilaian mencerminkan kualitas buah secara menyeluruh.`;
+
+      // --- Tabel per sisi ---
+      const tbody = document.getElementById('sisiTableBody');
+      tbody.innerHTML = '';
+
+      data.detail_per_sisi.forEach(d => {
+        const letter  = d.predicted_grade.replace('Grade_', '');
+        const isWorst = d.sisi === data.worst_sisi;
+        const probA   = d.probabilities.Grade_A;
+        const probB   = d.probabilities.Grade_B;
+        const probC   = d.probabilities.Grade_C;
+
+        const row = document.createElement('tr');
+        if (isWorst) row.classList.add('row-worst');
+
+        row.innerHTML = `
+          <td>
+            <img src="${previewDataURLs['sisi_' + d.sisi.toLowerCase()]}"
+                 alt="Foto ${d.sisi}" class="table-thumb">
+          </td>
+          <td>
+            <span class="sisi-name">${d.sisi}</span>
+            ${isWorst ? '<span class="worst-badge">Penentu</span>' : ''}
+          </td>
+          <td>
+            <span class="grade-pill grade-pill-${letter.toLowerCase()}">${d.predicted_label}</span>
+          </td>
+          <td>
+            <span class="conf-value ${d.is_strawberry ? '' : 'conf-low'}">${d.confidence.toFixed(1)}%</span>
+          </td>
+          <td class="prob-cell">
+            <div class="mini-bar-row">
+              <span class="mini-label grade-a-text">A</span>
+              <div class="mini-track"><div class="mini-fill grade-a-fill" style="width:${probA}%"></div></div>
+              <span class="mini-pct">${probA.toFixed(0)}%</span>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-label grade-b-text">B</span>
+              <div class="mini-track"><div class="mini-fill grade-b-fill" style="width:${probB}%"></div></div>
+              <span class="mini-pct">${probB.toFixed(0)}%</span>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-label grade-c-text">C</span>
+              <div class="mini-track"><div class="mini-fill grade-c-fill" style="width:${probC}%"></div></div>
+              <span class="mini-pct">${probC.toFixed(0)}%</span>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // --- Peringatan confidence rendah ---
+      const warning = document.getElementById('confWarning');
+      if (data.sisi_confidence_rendah && data.sisi_confidence_rendah.length > 0) {
+        document.getElementById('confWarningMsg').textContent =
+          `Sisi ${data.sisi_confidence_rendah.join(', ')} memiliki confidence di bawah ambang batas. ` +
+          `Foto pada sisi tersebut mungkin kurang jelas — pertimbangkan untuk mengulang dengan foto yang lebih baik.`;
+        warning.style.display = 'flex';
+      } else {
+        warning.style.display = 'none';
+      }
+
+      // --- Deskripsi grade ---
+      const descs = {
+        A: `Stroberi ini terklasifikasi sebagai <strong>Grade A (Premium)</strong>. Berdasarkan penilaian dari keempat sisi, buah memenuhi semua kriteria mutu tertinggi: warna merah merata, bentuk proporsional, permukaan bersih, dan ukuran optimal. Layak untuk pasar premium dan ekspor.`,
+        B: `Stroberi ini terklasifikasi sebagai <strong>Grade B (Standar)</strong>. Berdasarkan penilaian dari keempat sisi, buah memenuhi sebagian besar kriteria mutu namun terdapat 1–2 karakteristik yang belum mencapai level A. Layak untuk konsumsi dan pasar lokal.`,
+        C: `Stroberi ini terklasifikasi sebagai <strong>Grade C (Rendah)</strong>. Terdapat satu atau lebih sisi yang menunjukkan kondisi di bawah standar minimum — seperti warna kurang merata, cacat permukaan &gt;25%, ukuran terlalu kecil, atau tanda-tanda kerusakan. Tidak direkomendasikan untuk dijual sebagai buah segar.`
+      };
+      document.getElementById('hasilDesc').innerHTML = descs[gradeLetter] || '';
+
+      // Highlight kartu kriteria yang sesuai
+      ['A','B','C'].forEach(g => {
+        document.getElementById('kriteria' + g).classList.remove('kriteria-active');
+      });
+      document.getElementById('kriteria' + gradeLetter).classList.add('kriteria-active');
+    }
+
+    // ============================================
+    // RESET (Klasifikasi Ulang)
+    // ============================================
+    function resetAll() {
+      // Reset semua slot
+      SISI_FIELDS.forEach(field => {
+        selectedFiles[field]   = null;
+        previewDataURLs[field] = null;
+        document.getElementById('input-' + field).value    = '';
+        document.getElementById('img-' + field).src         = '';
+        document.getElementById('name-' + field).textContent = '';
+        document.getElementById('empty-' + field).style.display   = 'block';
+        document.getElementById('preview-' + field).style.display = 'none';
+        document.getElementById('box-' + field).classList.remove('slot-filled', 'drag-over');
+        document.getElementById('err-' + field).style.display     = 'none';
+      });
+
+      document.getElementById('errorBox').style.display    = 'none';
+      document.getElementById('hasilSection').style.display = 'none';
+      document.getElementById('uploadSection').style.display = 'block';
+
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Init
+    updateProgress();
+  </script>
+
+</body>
+</html>

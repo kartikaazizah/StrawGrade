@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StrawGrade — Sistem Klasifikasi Mutu Stroberi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <span class="logo-icon">🍓</span>
+        <span class="logo-text">StrawGrade</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}" class="nav-link active">Home</a></li>
+        <li><a href="{{ url_for('klasifikasi') }}" class="nav-link">Klasifikasi</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/053/690/929/large_2x/juicy-red-strawberries-free-photo.jpg"
+        alt="Buah stroberi segar merah"
+        class="hero-img"
+        loading="eager"
+      />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Sistem Grading Otomatis</p>
+      <h1 class="hero-title">Cek grade<br/><em>Stroberi-mu.</em></h1>
+      <p class="hero-desc">
+        Sistem berbasis <em>deep learning</em> yang mengklasifikasikan kualitas buah stroberi
+        lokal Indonesia ke dalam Grade A, B, dan C — akurat, cepat, dan objektif.
+      </p>
+      <a href="{{ url_for('klasifikasi') }}" class="btn-hero">Coba Klasifikasi Sekarang →</a>
+    </div>
+    <div class="hero-badge">
+      <span>SNI 8026:2014</span>
+      <span class="sep">+</span>
+      <span>USDA AMS 2016</span>
+    </div>
+  </section>
+
+  <!-- ===== TENTANG SISTEM ===== -->
+  <section class="section about-section">
+    <div class="container">
+      <div class="section-label">Tentang Sistem</div>
+      <h2 class="section-title">Mengapa Perlu<br/>Sistem Grading Otomatis?</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            Penilaian mutu stroberi secara manual sangat bergantung pada pengalaman dan
+            persepsi visual masing-masing orang. Akibatnya, hasilnya bisa berbeda-beda
+            tergantung siapa yang menilai, seberapa lelah mereka, atau kondisi pencahayaan
+            saat pemeriksaan berlangsung.
+          </p>
+          <p>
+            StrawGrade hadir sebagai solusi: sistem klasifikasi otomatis berbasis
+            <strong>Transfer Learning EfficientNet-B0</strong> yang menilai kualitas stroberi
+            dari foto buah secara konsisten dan terstandar, mengacu pada standar nasional
+            <strong>SNI 8026:2014</strong> dan internasional <strong>USDA AMS 2016</strong>.
+          </p>
+          <p>
+            Sistem ini dikembangkan khusus untuk stroberi lokal Indonesia, termasuk varietas
+            dari Malang dan Batu, Jawa Timur — dengan mempertimbangkan karakteristik kulit
+            buah lokal yang berbeda dari varietas impor.
+          </p>
+        </div>
+        <div class="about-cards">
+          <div class="about-card">
+            <div class="about-card-icon">🎯</div>
+            <div class="about-card-title">Objektif</div>
+            <div class="about-card-desc">Penilaian berdasarkan kriteria visual terstandar, bukan persepsi subjektif</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">⚡</div>
+            <div class="about-card-title">Cepat</div>
+            <div class="about-card-desc">Hasil klasifikasi dalam hitungan detik dari foto buah yang diunggah</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">📊</div>
+            <div class="about-card-title">Transparan</div>
+            <div class="about-card-desc">Setiap hasil disertai confidence score dan penjelasan kriteria per grade</div>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon">🇮🇩</div>
+            <div class="about-card-title">Lokal</div>
+            <div class="about-card-desc">Dilatih dengan data stroberi lokal Indonesia dari kebun di Kota Batu, Jawa Timur</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TENTANG STROBERI ===== -->
+  <section class="section berry-section">
+    <div class="container">
+      <div class="section-label">Mengenal Stroberi</div>
+      <h2 class="section-title">Buah Kecil dengan<br/>Standar yang Ketat</h2>
+      <div class="berry-intro">
+        <p>
+          Stroberi (<em>Fragaria × ananassa</em>) adalah buah berdaging lunak berwarna merah
+          dengan rasa manis-asam yang khas. Di Indonesia, sentra produksi utama berada di
+          dataran tinggi seperti Batu–Malang (Jawa Timur), Ciwidey (Jawa Barat), dan
+          Berastagi (Sumatera Utara). Kondisi udara sejuk dan tanah vulkanik di kawasan
+          tersebut menghasilkan buah dengan cita rasa yang unik dan aroma yang kuat.
+        </p>
+        <p>
+          Stroberi lokal Indonesia umumnya memiliki ukuran lebih kecil dibanding varietas
+          impor, dengan kulit yang lebih tipis dan lebih rentan terhadap kerusakan mekanis.
+          Karena itu, penanganan pasca panen dan standar grading yang tepat menjadi sangat
+          penting untuk menjaga nilai jual dan kualitas di pasaran.
+        </p>
+      </div>
+
+      <!-- Nutrisi -->
+      <div class="nutrisi-bar">
+        <h3 class="sub-title">Kandungan Gizi per 100 gram Stroberi Segar</h3>
+        <div class="nutrisi-grid">
+          <div class="nutrisi-item"><span class="nutrisi-val">32</span><span class="nutrisi-unit">kkal</span><span class="nutrisi-label">Energi</span></div>
+          <div class="nutrisi-item"><span class="nutrisi-val">58.8</span><span class="nutrisi-unit">mg</span><span class="nutrisi-label">Vitamin C</span></div>
+          <div class="nutrisi-item"><span class="nutrisi-val">2.0</span><span class="nutrisi-unit">g</span><span class="nutrisi-label">Serat</span></div>
+          <div class="nutrisi-item"><span class="nutrisi-val">7.7</span><span class="nutrisi-unit">g</span><span class="nutrisi-label">Gula</span></div>
+          <div class="nutrisi-item"><span class="nutrisi-val">0.7</span><span class="nutrisi-unit">g</span><span class="nutrisi-label">Protein</span></div>
+          <div class="nutrisi-item"><span class="nutrisi-val">91</span><span class="nutrisi-unit">%</span><span class="nutrisi-label">Kadar Air</span></div>
+        </div>
+        <p class="nutrisi-src">Sumber: USDA FoodData Central; DKBM Indonesia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GRADE ===== -->
+  <section class="section grade-section">
+    <div class="container">
+      <div class="section-label">Standar Mutu</div>
+      <h2 class="section-title">Tiga Kelas Mutu Stroberi</h2>
+      <p class="section-sub">
+        Berdasarkan SNI 8026:2014 dan USDA AMS 2016, mutu stroberi diklasifikasikan
+        menjadi tiga grade berdasarkan lima karakteristik visual utama.
+      </p>
+      <div class="grade-cards">
+
+        <div class="grade-card grade-a">
+          <div class="grade-badge">Grade A</div>
+          <div class="grade-title">Premium</div>
+          <ul class="grade-list">
+            <li><span class="attr">Warna</span> ≥75% permukaan merah/pink merata</li>
+            <li><span class="attr">Kematangan</span> Matang optimal, kulit mengkilap &amp; padat</li>
+            <li><span class="attr">Bentuk</span> Kerucut/oval sempurna di semua sisi</li>
+            <li><span class="attr">Ukuran</span> Bobot &gt;20 gram</li>
+            <li><span class="attr">Cacat</span> ≤10% permukaan (maks 2 dari 20 bagian)</li>
+          </ul>
+          <div class="grade-note">✦ Semua 5 karakteristik harus memenuhi level A</div>
+        </div>
+
+        <div class="grade-card grade-b">
+          <div class="grade-badge">Grade B</div>
+          <div class="grade-title">Standar</div>
+          <ul class="grade-list">
+            <li><span class="attr">Warna</span> 50–74% permukaan merah/pink</li>
+            <li><span class="attr">Kematangan</span> Matang sebagian, tidak ada tanda busuk</li>
+            <li><span class="attr">Bentuk</span> Maks 1 sisi deformasi ringan</li>
+            <li><span class="attr">Ukuran</span> Bobot 15–20 gram</li>
+            <li><span class="attr">Cacat</span> 10–25% permukaan (2–5 dari 20 bagian)</li>
+          </ul>
+          <div class="grade-note">✦ 1–2 karakteristik boleh di level B, tidak ada yang level C</div>
+        </div>
+
+        <div class="grade-card grade-c">
+          <div class="grade-badge">Grade C</div>
+          <div class="grade-title">Rendah</div>
+          <ul class="grade-list">
+            <li><span class="attr">Warna</span> &lt;50% permukaan merah/pink</li>
+            <li><span class="attr">Kematangan</span> Mentah atau terlalu matang/busuk</li>
+            <li><span class="attr">Bentuk</span> ≥2 sisi deformasi (tidak normal)</li>
+            <li><span class="attr">Ukuran</span> Bobot &lt;15 gram</li>
+            <li><span class="attr">Cacat</span> &gt;25% permukaan atau ada jamur/<em>Botrytis</em></li>
+          </ul>
+          <div class="grade-note">✦ Cukup salah satu kondisi di atas untuk masuk Grade C</div>
+        </div>
+
+      </div>
+
+      <!-- 5 Atribut -->
+      <div class="atribut-section">
+        <h3 class="sub-title">Lima Atribut Penentu Kualitas</h3>
+        <div class="atribut-grid">
+          <div class="atribut-item">
+            <div class="atribut-icon">🎨</div>
+            <div class="atribut-name">Warna</div>
+            <div class="atribut-desc">Indikator utama kematangan dan kesegaran buah. Warna merah merata menunjukkan mutu terbaik. Mengacu standar USDA AMS 2016.</div>
+          </div>
+          <div class="atribut-item">
+            <div class="atribut-icon">📐</div>
+            <div class="atribut-name">Bentuk</div>
+            <div class="atribut-desc">Keseragaman dan pertumbuhan buah. Buah berbentuk kerucut/oval proporsional dikategorikan bermutu tinggi. Mengacu SNI 8026:2014.</div>
+          </div>
+          <div class="atribut-item">
+            <div class="atribut-icon">⚖️</div>
+            <div class="atribut-name">Ukuran</div>
+            <div class="atribut-desc">Mencerminkan kondisi pertumbuhan. Buah berukuran besar dan seragam dikategorikan bermutu tinggi. Threshold bobot mengacu SNI 8026:2014 Tabel 2.</div>
+          </div>
+          <div class="atribut-item">
+            <div class="atribut-icon">🌿</div>
+            <div class="atribut-name">Kematangan</div>
+            <div class="atribut-desc">Berkaitan dengan warna, tekstur, dan kandungan gula. Matang penuh dengan tekstur padat = mutu tinggi. Mengacu standar USDA AMS 2016.</div>
+          </div>
+          <div class="atribut-item">
+            <div class="atribut-icon">🔍</div>
+            <div class="atribut-name">Cacat Permukaan</div>
+            <div class="atribut-desc">Meliputi goresan, bercak, atau infeksi jamur. Jamur <em>Botrytis cinerea</em> (grey mold) dalam ukuran berapapun otomatis Grade C. Mengacu SNI + USDA.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SNI Info -->
+      <div class="sni-box">
+        <div class="sni-icon">📋</div>
+        <div class="sni-content">
+          <div class="sni-title">Dasar Standar yang Digunakan</div>
+          <div class="sni-text">
+            <strong>SNI 8026:2014</strong> — Standar Nasional Indonesia untuk buah stroberi segar,
+            diterbitkan oleh Badan Standardisasi Nasional (BSN), mencakup persyaratan mutu umum
+            berdasarkan keutuhan, kesegaran, dan kondisi permukaan buah.<br/><br/>
+            <strong>USDA AMS 2016</strong> (Agricultural Marketing Service) — standar internasional
+            untuk klasifikasi stroberi berdasarkan kondisi visual meliputi warna, ukuran minimum,
+            bentuk, dan toleransi terhadap cacat permukaan.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="container cta-inner">
+      <h2 class="cta-title">Siap Cek Mutu Stroberimu?</h2>
+      <p class="cta-desc">Upload foto buah stroberi dan dapatkan hasil klasifikasi Grade A, B, atau C beserta confidence score-nya.</p>
+      <a href="{{ url_for('klasifikasi') }}" class="btn-cta">Mulai Klasifikasi →</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">🍓</span>
+        <span class="logo-text">StrawGrade</span>
+      </div>
+      <div class="footer-info">
+        Sistem Klasifikasi Mutu Stroberi berbasis Transfer Learning EfficientNet-B0<br/>
+        <!-- Tugas Akhir D-IV Teknik Informatika · Universitas Airlangga<br/> -->
+        Acuan: SNI 8026:2014 &amp; USDA AMS 2016
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const links = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      links.classList.toggle('open');
+      toggle.classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>
